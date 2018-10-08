@@ -22,98 +22,27 @@ package(
     ],
 )
 
-load(
-    "//tensorflow_lattice:tensorflow_lattice.bzl",
-    "rpath_linkopts",
-)
-load(
-    "@org_tensorflow//tensorflow:tensorflow.bzl",
-    "tf_gen_op_wrapper_py",
-)
-load("@org_tensorflow//tensorflow:tensorflow.bzl", "tf_custom_op_py_library")
 
-tf_gen_op_wrapper_py(
-    name = "pwl_indexing_calibrator_py_wrapper",
-    out = "ops/gen_pwl_indexing_calibrator.py",
-    cc_linkopts = rpath_linkopts("pwl_indexing_calibrator_py_wrapper"),
-    hidden = [],
-    deps = [
-        "//tensorflow_lattice/cc:pwl_indexing_calibrator_ops_op_lib",
-    ],
-)
-
-tf_gen_op_wrapper_py(
-    name = "monotonic_projection_py_wrapper",
-    out = "ops/gen_monotonic_projection.py",
-    cc_linkopts = rpath_linkopts("monotonic_projection_py_wrapper"),
-    hidden = [],
-    deps = [
-        "//tensorflow_lattice/cc:monotonic_projection_op_op_lib",
-    ],
-)
-
-tf_gen_op_wrapper_py(
-    name = "lattice_interpolation_py_wrapper",
-    out = "ops/gen_lattice_interpolation.py",
-    cc_linkopts = rpath_linkopts("lattice_interpolation_py_wrapper"),
-    hidden = [],
-    require_shape_functions = True,
-    deps = [
-        "//tensorflow_lattice/cc:lattice_interpolation_ops_op_lib",
-    ],
-)
-
-tf_gen_op_wrapper_py(
-    name = "monotone_lattice_py_wrapper",
-    out = "ops/gen_monotone_lattice.py",
-    cc_linkopts = rpath_linkopts("monotone_lattice_py_wrapper"),
-    hidden = [],
-    require_shape_functions = True,
-    deps = [
-        "//tensorflow_lattice/cc:monotone_lattice_ops_op_lib",
-    ],
-)
-
-tf_custom_op_py_library(
+py_library(
     name = "lattice_ops_py",
     srcs = [
         "ops/lattice_ops.py",
     ],
-    dso = [
+    data = [
         "//tensorflow_lattice/cc:ops/_lattice_ops.so",
     ],
-    kernels = [
-        "//tensorflow_lattice/cc:lattice_ops",
-        "//tensorflow_lattice/cc/kernels:lattice_kernels",
-    ],
     srcs_version = "PY2AND3",
-    deps = [
-        ":lattice_interpolation_py_wrapper",
-        ":monotone_lattice_py_wrapper",
-        "@org_tensorflow//tensorflow:tensorflow_py",
-        "@org_tensorflow//tensorflow/python:framework_for_generated_wrappers",
-    ],
 )
 
-tf_custom_op_py_library(
+py_library(
     name = "pwl_calibration_ops_py",
     srcs = [
         "ops/pwl_calibration_ops.py",
     ],
-    dso = [
+    data = [
         "//tensorflow_lattice/cc:ops/_pwl_calibration_ops.so",
     ],
-    kernels = [
-        "//tensorflow_lattice/cc:pwl_calibration_ops",
-        "//tensorflow_lattice/cc/kernels:pwl_calibration_kernels",
-    ],
     srcs_version = "PY2AND3",
-    deps = [
-        ":monotonic_projection_py_wrapper",
-        ":pwl_indexing_calibrator_py_wrapper",
-        "@org_tensorflow//tensorflow:tensorflow_py",
-        "@org_tensorflow//tensorflow/python:framework_for_generated_wrappers",
-    ],
 )
 
 py_library(
@@ -122,8 +51,6 @@ py_library(
     srcs_version = "PY2AND3",
     deps = [
         ":tools",
-        "@org_tensorflow//third_party/py/numpy",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -134,7 +61,6 @@ py_test(
     srcs_version = "PY2AND3",
     deps = [
         ":keypoints_initialization",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -147,7 +73,6 @@ py_library(
         ":pwl_calibration_ops_py",
         ":regularizers",
         ":tools",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -159,8 +84,6 @@ py_test(
     deps = [
         ":pwl_calibration_layers",
         ":tools",
-        "@org_tensorflow//third_party/py/numpy",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -172,7 +95,6 @@ py_library(
         ":lattice_ops_py",
         ":regularizers",
         ":tools",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -183,7 +105,6 @@ py_test(
     srcs_version = "PY2AND3",
     deps = [
         ":lattice_layers",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -194,7 +115,6 @@ py_library(
     deps = [
         ":regularizers",
         ":tools",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -205,7 +125,6 @@ py_test(
     srcs_version = "PY2AND3",
     deps = [
         ":monotone_linear_layers",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -215,7 +134,6 @@ py_library(
     srcs_version = "PY2AND3",
     deps = [
         ":tools",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -226,7 +144,6 @@ py_test(
     srcs_version = "PY2AND3",
     deps = [
         ":regularizers",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -235,10 +152,6 @@ py_library(
     name = "tools",
     srcs = ["lib/tools.py"],
     srcs_version = "PY2AND3",
-    deps = [
-        "@org_tensorflow//third_party/py/numpy",
-        "@org_tensorflow//tensorflow:tensorflow_py",
-    ],
 )
 
 py_test(
@@ -249,8 +162,6 @@ py_test(
     deps = [
         ":test_data",
         ":tools",
-        "@org_tensorflow//third_party/py/numpy",
-        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
 
@@ -258,7 +169,4 @@ py_library(
     name = "test_data",
     srcs = ["lib/test_data.py"],
     srcs_version = "PY2AND3",
-    deps = [
-        "@org_tensorflow//tensorflow:tensorflow_py",
-    ],
 )

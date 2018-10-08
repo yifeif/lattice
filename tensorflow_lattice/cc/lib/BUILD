@@ -25,8 +25,9 @@ cc_library(
     srcs = ["lattice_structure.cc"],
     hdrs = ["lattice_structure.h"],
     deps = [
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
-        "@org_tensorflow//tensorflow/core:framework_lite",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
         "@protobuf_archive//:protobuf",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]
 )

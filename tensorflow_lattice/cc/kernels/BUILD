@@ -24,8 +24,6 @@ load(
     "//tensorflow_lattice:tensorflow_lattice.bzl",
     "rpath_linkopts",
 )
-load("@org_tensorflow//tensorflow:tensorflow.bzl", "tf_kernel_library")
-load("@org_tensorflow//tensorflow:tensorflow.bzl", "tf_cc_test")
 
 # Piecewise-linear calibration kernels
 cc_library(
@@ -36,24 +34,27 @@ cc_library(
     ],
 )
 
-tf_kernel_library(
+cc_library(
     name = "pwl_indexing_calibrator_kernels",
     srcs = ["pwl_indexing_calibrator_kernels.cc"],
     deps = [
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
-        "@org_tensorflow//tensorflow/core:framework_lite",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
         "@protobuf_archive//:protobuf",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
-tf_kernel_library(
+cc_library(
     name = "monotonic_projection_kernel",
     srcs = ["monotonic_projection_kernel.cc"],
     deps = [
         ":monotonic_projections",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
         "@protobuf_archive//:protobuf",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
 # Lattice interpolation kernels
@@ -64,6 +65,7 @@ cc_library(
         ":monotone_lattice_kernels",
         ":simplex_interpolation_kernels",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
 cc_library(
@@ -72,30 +74,34 @@ cc_library(
     hdrs = ["lattice_interpolation_base.h"],
     deps = [
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]
 )
 
-tf_kernel_library(
+cc_library(
     name = "hypercube_interpolation_kernels",
     srcs = ["hypercube_interpolation_kernels.cc"],
     deps = [
         ":lattice_interpolation_base",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
-    alwayslink = 1,
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
-tf_kernel_library(
+cc_library(
     name = "simplex_interpolation_kernels",
     srcs = ["simplex_interpolation_kernels.cc"],
     deps = [
         ":lattice_interpolation_base",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
-    alwayslink = 1,
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
 # Monotonic projections.
@@ -103,9 +109,10 @@ cc_library(
     name = "monotonic_projections",
     hdrs = ["monotonic_projections.h"],
     deps = [
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
-        "@org_tensorflow//tensorflow/core:framework_lite",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
 cc_library(
@@ -113,9 +120,10 @@ cc_library(
     srcs = ["lattice_raw_iterator.cc"],
     hdrs = ["lattice_raw_iterator.h"],
     deps = ["//tensorflow_lattice/cc/lib:lattice_structure"],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
-tf_cc_test(
+cc_test(
     name = "lattice_raw_iterator_test",
     srcs = ["lattice_raw_iterator_test.cc"],
     linkopts = rpath_linkopts("lattice_raw_iterator_test"),
@@ -123,8 +131,8 @@ tf_cc_test(
         ":lattice_raw_iterator",
         "//tensorflow_lattice/cc:test_main",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:lib",
-        "@org_tensorflow//tensorflow/core:test",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
 )
 
@@ -135,11 +143,13 @@ cc_library(
         ":lattice_raw_iterator",
         ":monotonic_projections",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )
 
-tf_cc_test(
+cc_test(
     name = "monotonic_lattice_projections_test",
     srcs = ["monotonic_lattice_projections_test.cc"],
     linkopts = rpath_linkopts("monotonic_lattice_projections_test"),
@@ -147,20 +157,21 @@ tf_cc_test(
         ":monotonic_lattice_projections",
         "//tensorflow_lattice/cc:test_main",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:lib",
-        "@org_tensorflow//tensorflow/core:test",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
 )
 
 # Monotone lattice kernels.
-tf_kernel_library(
+cc_library(
     name = "monotone_lattice_kernels",
     srcs = ["monotone_lattice_kernels.cc"],
     deps = [
         ":lattice_interpolation_base",
         ":monotonic_lattice_projections",
         "//tensorflow_lattice/cc/lib:lattice_structure",
-        "@org_tensorflow//tensorflow/core:framework_headers_lib",
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
     ],
-    alwayslink = 1,
+    copts = ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"]    
 )

@@ -25,13 +25,6 @@ This file exports the basic graph operations used for calibrators. See
 pwl_calibration_layers.py for more details and higher level calibration
 functions, for building models.
 """
-# pylint: disable=unused-import
-from tensorflow_lattice.python.ops.gen_monotonic_projection import monotonic_projection
-from tensorflow_lattice.python.ops.gen_pwl_indexing_calibrator import pwl_indexing_calibrator
-from tensorflow_lattice.python.ops.gen_pwl_indexing_calibrator import pwl_indexing_calibrator_gradient
-from tensorflow_lattice.python.ops.gen_pwl_indexing_calibrator import pwl_indexing_calibrator_sparse
-from tensorflow_lattice.python.ops.gen_pwl_indexing_calibrator import pwl_indexing_calibrator_sparse_gradient
-# pylint: enable=unused-import
 
 from tensorflow.python.framework import load_library
 from tensorflow.python.framework import ops

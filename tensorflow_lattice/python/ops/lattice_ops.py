@@ -13,12 +13,6 @@
 # limitations under the License.
 # ==============================================================================
 """Lattice interpolation and gradient ops."""
-# pylint: disable=unused-import
-from tensorflow_lattice.python.ops.gen_lattice_interpolation import hypercube_gradient
-from tensorflow_lattice.python.ops.gen_lattice_interpolation import hypercube_interpolation
-from tensorflow_lattice.python.ops.gen_lattice_interpolation import simplex_gradient
-from tensorflow_lattice.python.ops.gen_lattice_interpolation import simplex_interpolation
-# pylint: enable=unused-import
 
 from tensorflow.python.framework import load_library
 from tensorflow.python.framework import ops
@@ -27,7 +21,10 @@ from tensorflow.python.platform import resource_loader
 
 _lattice_ops = load_library.load_op_library(
     resource_loader.get_path_to_datafile('../../cc/ops/_lattice_ops.so'))
-
+hypercube_gradient = _lattice_ops.hypercube_gradient
+hypercube_interpolation = _lattice_ops.hypercube_interpolation
+simplex_gradient = _lattice_ops.simplex_gradient
+simplex_interpolation = _lattice_ops.simplex_interpolation
 
 @ops.RegisterGradient('HypercubeInterpolation')
 def _hypercube_gradient(op, grad_wrt_weight):

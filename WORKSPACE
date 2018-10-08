@@ -30,9 +30,22 @@ http_archive(
     ],
 )
 
-load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
+PROTOBUF_URLS = [
+    "https://mirror.bazel.build/github.com/google/protobuf/archive/v3.6.0.tar.gz",
+    "https://github.com/google/protobuf/archive/v3.6.0.tar.gz",
+]
+PROTOBUF_SHA256 = "50a5753995b3142627ac55cfd496cebc418a2e575ca0236e29033c67bd5665f4"
+PROTOBUF_STRIP_PREFIX = "protobuf-3.6.0"
 
-tf_workspace(
-    path_prefix = "",
-    tf_repo_name = "org_tensorflow",
+http_archive(
+    name = "protobuf_archive",
+    sha256 = PROTOBUF_SHA256,
+    strip_prefix = PROTOBUF_STRIP_PREFIX,
+    urls = PROTOBUF_URLS,
+)
+
+load("//tf:tf_configure.bzl", "tf_configure")
+
+tf_configure(
+    name = "local_config_tf",
 )
